@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import { Container, Row, Col } from 'reactstrap';
-import { Wish, ask } from './Wish';
+import { Wish, wishGet } from './Wish';
 import { tableFromObjects } from './Table-render-functions/tableFromObjects';
 import { pseudoValues } from './PseudoData';
 
@@ -35,8 +35,8 @@ class App extends React.Component<any,any>
 
   componentDidMount=async()=>
   {
-    let t=await ask(this.state.wishTrucks)
-    let l=await ask(this.state.wishLocations)
+    let t=await wishGet(this.state.wishTrucks)
+    let l=await wishGet(this.state.wishLocations)
 
     this.setState({
       trucks:t,
