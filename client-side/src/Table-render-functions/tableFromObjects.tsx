@@ -1,12 +1,10 @@
 import React from "react";
 import { Table } from "reactstrap";
-import { rowFromObjectProps } from "./rowFromObjectProps";
-import { rowFromObjectValues } from "./rowFromObjectValues";
+import { rowFromObject } from "./rowFromObject";
 
 /*
 	returns jsx that is a table of the array of objs.
-	object keys become columns
-	objects become rows
+	each object is a row in the table
 */
 export function tableFromObjects(arrayOfObjs:any)
 {
@@ -17,10 +15,16 @@ export function tableFromObjects(arrayOfObjs:any)
 	return(<>
 		<Table>
 			<body>
-				{rowFromObjectProps(arrayOfObjs[0])}
 				{
-					arrayOfObjs.map((obj:any)=>{
-						return rowFromObjectValues(obj)
+					arrayOfObjs.map((obj:any,i:number)=>{
+						return(<tr>
+								<td>
+									{i}
+								</td>
+								<td>
+									{JSON.stringify(obj)}
+								</td>
+							</tr>)
 					})
 				}
 			</body>

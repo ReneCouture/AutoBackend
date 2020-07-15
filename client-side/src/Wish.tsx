@@ -3,12 +3,15 @@
 	We can define how the system works from here
 */
 
-import { PseudoData, pseudoGimme } from "./PseudoData";
+import { DataPlaceholder, dataPlacerHolderGetPseudo } from "./DataPlaceholder";
 
 //T we want auto-backend to generate pretend data. 
 //F we want data from the server
 export const usePseudoData=true 
 export const pseudoEntries=8	//how many fake rows do we generate? must be 1 or more
+
+//all the wishes will be stored here so the backend may be generated from them
+export let allTheWishes:Wish[]=[]
 
 /*
 	This defines the data we wish the server would give us
@@ -17,10 +20,20 @@ export class Wish
 {
 	dataWeWant:any;//the objects we want from the backend { }
 
-	constructor(json:any)
-	{
-		this.dataWeWant=json
-	}
+	// constructor(json:any)
+	// {
+	// 	allTheWishes.push(this)
+	// 	this.dataWeWant=json
+	// }
+}
+
+export function wishCreate(json:any)
+{
+	let thing=new Wish()
+	let len=allTheWishes.push(thing)
+	console.log(`wishCreate len=${len}`)
+	thing.dataWeWant=json
+	return thing
 }
 
 /*
@@ -40,9 +53,9 @@ export function wishGet(wish:Wish)
 
 			for(let prop in wish.dataWeWant)//loops over 'name' and 'color'
 			{
-				let pseudoObject:PseudoData=wish.dataWeWant[prop]
+				let pseudoObject:DataPlaceholder=wish.dataWeWant[prop]
 
-				dataWithValuesPutIn[prop]=pseudoGimme(pseudoObject)
+				dataWithValuesPutIn[prop]=dataPlacerHolderGetPseudo(pseudoObject)
 			}
 
 			dataWereReturning.push(dataWithValuesPutIn)

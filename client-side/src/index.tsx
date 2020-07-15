@@ -3,40 +3,40 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import { Container, Row, Col } from 'reactstrap';
-import { Wish, wishGet } from './Wish';
+import { wishGet, wishCreate, allTheWishes } from './Wish';
+import { tableFromPropsAndValues } from './Table-render-functions/tableFromPropsAndValues';
+import { dataPlacerHolderPseudoRandom, dataPlacerHolderPseudoCounter } from './DataPlaceholder';
 import { tableFromObjects } from './Table-render-functions/tableFromObjects';
-import { pseudoValues } from './PseudoData';
+
+//I am defining wishes here because inside the constructor, it was making twice as many wishes.
+//we want the data we wish we could receive defined once.
+const wishTrucks=wishCreate(
+  {//define the data we wish we could receive from the server
+    name:   dataPlacerHolderPseudoRandom(["Mack","Old Pete"]),
+    color:  dataPlacerHolderPseudoRandom(["red","blue"]),
+  })
+
+const wishLocations=wishCreate(
+  {
+    county: dataPlacerHolderPseudoRandom(["Springfield","Nework"]),
+    zip:    dataPlacerHolderPseudoCounter(10000)
+  })
 
 class App extends React.Component<any,any>
 {
   constructor(props:any)
   {
     super(props)
-
     this.state={
       trucks:[], //we'll store our data here after it is fetched
       locations:[],
-
-      wishTrucks:new Wish(
-        {//define the data we wish we could receive from the server
-          name:   pseudoValues("Mack","Old Pete","Silverado","Clunker","Topcat"),
-          color:  pseudoValues("red","blue","black","silver"),
-        }
-      ),
-
-      wishLocations:new Wish(
-        {
-          state:  pseudoValues("VT","TX","FL","CA","SC","AL","HI"),
-          zip:    pseudoValues("02381","101421","385733","29443"),
-        }
-      )
     }
   }
 
   componentDidMount=async()=>
   {
-    let t=await wishGet(this.state.wishTrucks)
-    let l=await wishGet(this.state.wishLocations)
+    let t=await wishGet(wishTrucks)
+    let l=await wishGet(wishLocations)
 
     this.setState({
       trucks:t,
@@ -53,11 +53,15 @@ class App extends React.Component<any,any>
         <Row>
           <Col>
             <h4>Trucks</h4>
-            {tableFromObjects(this.state.trucks)}
+            {tableFromPropsAndValues(this.state.trucks)}
           </Col>
           <Col>
             <h4>Locations</h4>
-            {tableFromObjects(this.state.locations)}
+            {tableFromPropsAndValues(this.state.locations)}
+          </Col>
+          <Col>
+            <h4>All wishes</h4>
+            {tableFromObjects(allTheWishes)}
           </Col>
         </Row>
       </Container>
