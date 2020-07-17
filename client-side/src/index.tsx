@@ -2,24 +2,28 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import { Container, Row, Col } from 'reactstrap';
-import { wishGet, wishCreate, allTheWishes } from './Wish';
+import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { tableFromPropsAndValues } from './Table-render-functions/tableFromPropsAndValues';
 import { dataPlacerHolderPseudoRandom, dataPlacerHolderPseudoCounter } from './DataPlaceholder';
 import { tableFromObjects } from './Table-render-functions/tableFromObjects';
+import { wishCreate, allTheWishes } from './Wish/Wish';
+import { wishGet } from './Wish/WishGet';
+import { wishGenerateAll } from './Wish/WishGenerateAll';
+import { AlertError } from './Helpers/AlertError';
+import { AlertSuccess } from './Helpers/AlertSuccess';
 
 //I am defining wishes here because inside the constructor, it was making twice as many wishes.
 //we want the data we wish we could receive defined once.
-const wishTrucks=wishCreate(
+const wishTrucks=wishCreate("wish_trucks",
   {//define the data we wish we could receive from the server
-    name:   dataPlacerHolderPseudoRandom(["Mack","Old Pete"]),
-    color:  dataPlacerHolderPseudoRandom(["red","blue"]),
+    name:   dataPlacerHolderPseudoRandom('string',["Sneezy","Old Pete","Top Cat"]),
+    color:  dataPlacerHolderPseudoRandom('string',["red","blue","black"]),
   })
 
-const wishLocations=wishCreate(
+const wishLocations=wishCreate("wish_locations",
   {
-    county: dataPlacerHolderPseudoRandom(["Springfield","Nework"]),
-    zip:    dataPlacerHolderPseudoCounter(10000)
+    county: dataPlacerHolderPseudoRandom('string',["Springfield","Albany","Reston"]),
+    zip:    dataPlacerHolderPseudoCounter('number',10000)
   })
 
 class App extends React.Component<any,any>
@@ -28,8 +32,11 @@ class App extends React.Component<any,any>
   {
     super(props)
     this.state={
-      trucks:[], //we'll store our data here after it is fetched
+      trucks:[],          //we'll store our data here after it is fetched
       locations:[],
+      errorObj:null,      //holds error object and a possible message to display in an alert
+      errorMessage:"",
+      successMessage:"",  //holds a success message to display in an alert
     }
   }
 
@@ -40,7 +47,7 @@ class App extends React.Component<any,any>
 
     this.setState({
       trucks:t,
-      locations:l
+      locations:l,
     })
   }
 
@@ -50,6 +57,8 @@ class App extends React.Component<any,any>
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
       <Container>
         <p>This website will be an example of how auto-backend will work. This site calculates locations for trucks to drive to.</p>
+        <AlertError message={this.state.errorMessage} error={this.state.error}/>
+        <AlertSuccess message={this.state.successMessage}/>
         <Row>
           <Col>
             <h4>Trucks</h4>
@@ -60,14 +69,38 @@ class App extends React.Component<any,any>
             {tableFromPropsAndValues(this.state.locations)}
           </Col>
           <Col>
-            <h4>All wishes</h4>
+            <Row>
+                <Col><h4>All wishes</h4>  </Col>
+                <Col><Button onClick={this.clickGenerate}>Generate</Button> </Col>
+            </Row>
             {tableFromObjects(allTheWishes)}
           </Col>
         </Row>
       </Container>
     </>)
   }
+
+  clickGenerate=async()=>
+  {
+    try
+    {
+      await wishGenerateAll()
+
+      this.setState({
+        successMessage:"Backend has been generated from wishes"
+      })
+    }
+    catch(e)
+    {
+      this.setState({
+        errorObj:e,
+        errorMessage:"Could not generate all wishes"
+      })
+    }
+  }
 }
+
+
 
 ReactDOM.render(
   <React.StrictMode>

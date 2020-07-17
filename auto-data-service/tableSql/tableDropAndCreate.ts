@@ -1,5 +1,5 @@
 import { log } from "../log"
-import { performQuery } from "../connectionPool"
+import { performQuery } from "../Connections/connectionPool"
 import { tableColsFromWish } from "./tableColsFromWish"
 
 /*
@@ -27,3 +27,12 @@ export async function tableDropAndCreate(wish:any)
 	return await performQuery(queAll)
 }
 
+function tableDrop(wish:any)
+{
+
+}
+
+function tableCreate(wish:any)
+{
+
+}

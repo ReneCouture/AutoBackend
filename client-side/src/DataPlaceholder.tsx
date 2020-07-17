@@ -10,22 +10,25 @@ export class DataPlaceholder
 	pseudoType='RANDOM'			//the type of generation used for pseudo values
 	possiblePseudoValues:any	//the possible pseudo values to choose from randomly
 	currentPseudoCount=0		//the counter used when pseudo must count upwards
+	dataType=''					//the data type this placeholder will be on the backend. text,decimal,integer...
 }
 
-export function dataPlacerHolderPseudoRandom(possiblePseudoValues:any[])
+export function dataPlacerHolderPseudoRandom(dataType:string,possiblePseudoValues:any[])
 {
-	let thing=new DataPlaceholder()
-	thing.pseudoType='RANDOM'
-	thing.possiblePseudoValues=possiblePseudoValues
-	return thing
+	let dp=new DataPlaceholder()
+	dp.pseudoType='RANDOM'
+	dp.dataType=dataType
+	dp.possiblePseudoValues=possiblePseudoValues
+	return dp
 }
 
-export function dataPlacerHolderPseudoCounter(start:number)
+export function dataPlacerHolderPseudoCounter(dataType:string,start:number)
 {
-	let thing=new DataPlaceholder()
-	thing.pseudoType='COUNT'
-	thing.currentPseudoCount=start
-	return thing
+	let dp=new DataPlaceholder()
+	dp.pseudoType='COUNT'
+	dp.dataType=dataType
+	dp.currentPseudoCount=start
+	return dp
 }
 
 export function dataPlacerHolderGetPseudo(data:DataPlaceholder)

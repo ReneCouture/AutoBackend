@@ -1,5 +1,5 @@
 import { app } from "."
-import { performQuery } from "./connectionPool"
+import { performQuery } from "./Connections/connectionPool"
 import { Request,Response } from "express";
 import { log } from "./log";
 import { logSend } from "./logSend";
@@ -13,15 +13,23 @@ export function endTablesDropAndGenerate()
 
 		try
 		{
+			//log(`incoming request=`,rq)
+			console.log(`incoming request=${rq}`)
 			log(`incoming json=`,rq.body)
+			log(`generateObjectName=`,rq.body.generateObjectName)
 
-			if(!Array.isArray(rq.body))
+			let allTheWishes=rq.body.allTheWishes
+			log(`allTheWishes=`,allTheWishes)
+
+			if(!Array.isArray(allTheWishes))
 			{
 				await logSend(rs,`Please provide an array of objects to generate the tables from. The type was ${typeof rq.body}`)
 				return
 			}
 
-			rq.body.map(async(wish:any)=>{
+			//For now, create tables directly from wishes
+			//wishes may be different from tables in the future after optimizations are performed
+			allTheWishes.map(async(wish:any)=>{
 				await tableDropAndCreate(wish)
 			})
 

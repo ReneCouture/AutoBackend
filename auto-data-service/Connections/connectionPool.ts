@@ -1,5 +1,5 @@
 import{Pool, PoolClient, QueryResult}from 'pg'
-import { log } from './log';
+import { log } from '../log';
 
 /*
     Sets up a connection to the database.

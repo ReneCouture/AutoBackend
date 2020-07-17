@@ -1,13 +1,15 @@
 import express from 'express';
 import bodyparser from 'body-parser'
 import { Request,Response } from "express";
-import { performQuery } from './connectionPool';
+import { performQuery } from './Connections/connectionPool';
 import { endTablesDropAndGenerate } from './endTablesDropAndGenerate';
 import { log } from './log';
+import { corsFilter } from './Connections/corsFilter';
 
 export const app=express();
 
-app.use(bodyparser.json())//convert the request to JSON
+app.use(bodyparser.json())	//convert the request to JSON
+app.use(corsFilter)			//very unsecure cors stuff. I use this to test locally
 
 endTablesDropAndGenerate()
 
@@ -17,5 +19,5 @@ app.get(``,async(rq:Request,rs:Response)=>
 })
 
 app.listen(3008,()=>{
-    console.log(`Express is back has started. listening port 3008. Here we go!`)
+    console.log(`Auto-data-service has started. listening on port 3008. Here we go!`)
 })

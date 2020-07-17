@@ -2,25 +2,25 @@ import { log } from "../log"
 import { tableColFromComp } from "./tableColFromComp"
 
 /*
-	Returns a table rows as sql created from a wish.
+	Returns table rows as sql created from a wish.
 
 	wish is:
 		{
-        "wishName": "wish0",
-        "comps": [
-            {
-                "name": "yourColumNameA",
-                "type": "string"
-            },
-			 {
-                "name": "yourColumNameB",
-                "type": "decimal"
-            }
-        ]
-    }
+			"wishName": "wish0",
+			"comps": [
+				{
+					"name": "yourColumNameA",
+					"type": "string"
+				},
+				{
+					"name": "yourColumNameB",
+					"type": "decimal"
+				}
+			]
+		}
 
 	returns sql columns:
-		(yourColumName text,yourColumNameB decimal)
+		(yourColumNameA text,yourColumNameB decimal)
 */
 export function tableColsFromWish(wish:any)
 {
@@ -35,13 +35,15 @@ export function tableColsFromWish(wish:any)
 	{
 		let col=tableColFromComp(wish.comps[0])
 		log(`col=`,col)
-		return `(${col})`
+		return `(${col})`//return one column (yourColumNameA text)
 	}
 
+	//return many columns with commas between each one
 	let cols=`(${tableColFromComp(wish.comps[0])}`
 
 	for(let i=1;i<wish.comps.length;i++)
 	{
+		//keep concatinating columns together including commas
 		cols=`${cols},${tableColFromComp(wish.comps[i])}`
 	}
 
