@@ -1,24 +1,27 @@
-import { log } from "../log";
-import { axiosClient } from "../axios";
-import { allTheWishes } from "./Wish";
+import { log } from "../Other/log";
+import { axiosClient } from "../Other/axios";
+import { allTheWishes } from "./wishesConfig";
 
 /*
 	Generates the backend from all the defined wishes. 
-	This hits the siteUrl/tablesDropAndGenerate endpoint for now.
+	This hits the siteUrl/performGenerate endpoint for now.
 	this sends all the wishes in the following form:
 		{
 			generateObjectName:"Fancy name with encryption stuff maybe"
+			tablesDrop:true,
+			tablesCreate:true,
+			tablesHavePseudoData:true,
 			allTheWishes:[
 				{
-					"wishName": "wish_a",
+					"name": "wish_a",
 					"comps": [
 						{
-							"name": "colum_x",
-							"type": "string"
+							"name": 		"colum_x",
+							"type": 		"string",
 						},
 						{
-							"name": "colum_y",
-							"type": "decimal"
+							"name": 		"colum_y",
+							"type": 		"decimal",
 						}
 					]
 				}
@@ -32,28 +35,31 @@ import { allTheWishes } from "./Wish";
 			yourDataNameC:	pseudoDataObject,
 		}
 */
-export async function wishGenerateAll()
+export async function wishSendGenerate()
 {
-	log(`wishGenerateAll() has been reached`)
+	log(`wishSendGenerate() has been reached`)
 
 	//create the correctly formatted wishes to put into the request
 	let requestWishes=allTheWishes.map((wish:any)=>
 	{
 		return{
-			wishName:wish.name,
-			comps:compsFromDataWeWant(wish.dataWeWant)
+			name:wish.name,
+			comps:dataWeWantToComps(wish.dataWeWant)
 		}
 	})
 
 	//create the generate request
 	let request={
 		generateObjectName:"Fancy name with encryption stuff maybe",
+		tablesDrop:true,
+		tablesCreate:true,
+		tablesHavePseudoData:true,
 		allTheWishes:requestWishes
 	}
 
 	log(`request=`,request)
 
-	axiosClient.post('/tablesDropAndGenerate',request)
+	axiosClient.post('/performGenerate',request)
 }
 
 /*
@@ -67,19 +73,19 @@ export async function wishGenerateAll()
 	component is:
 		[
 			{
-				name:yourDataNameA,
-				type:string
+				name:			yourDataNameA,
+				type:			string,
 			},
 			{
-				name:yourDataNameB,
-				type:integer
+				name:			yourDataNameB,
+				type:			integer,
 			},
 		]
 
 */
-function compsFromDataWeWant(dataWeWant:any)
+function dataWeWantToComps(dataWeWant:any)
 {
-	log(`compsFromDataWeWant() has been reached`)
+	log(`dataWeWantToComps() has been reached`)
 	//log(`dataWeWant=`,dataWeWant)
 
 	let data:any[]=[]
@@ -88,9 +94,11 @@ function compsFromDataWeWant(dataWeWant:any)
 	//not sure i'm happy with this style
 	for(let k in dataWeWant)
 	{
+		let comp=dataWeWant[k]//wish component
+
 		data.push({
-			name:k,
-			type:dataWeWant[k].dataType,
+			name:			k,
+			type:			comp.dataType,
 		})
 	}
 

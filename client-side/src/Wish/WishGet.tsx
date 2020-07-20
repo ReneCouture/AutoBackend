@@ -1,6 +1,6 @@
-import { Wish, usePseudoData, pseudoEntries } from "./Wish"
-import { DataPlaceholder, dataPlacerHolderGetPseudo } from "../DataPlaceholder"
+import { usePseudoData } from "./wishesConfig"
 import { wishGetPseudos } from "./wishGetPseudos"
+import { Wish } from "./Wish"
 
 /*
 	This returns the data from the server that we wish we would receive

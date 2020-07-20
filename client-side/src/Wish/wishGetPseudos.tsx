@@ -1,5 +1,6 @@
-import { Wish, pseudoEntries } from "./Wish"
+import { pseudoEntries } from "./wishesConfig"
 import { DataPlaceholder, dataPlacerHolderGetPseudo } from "../DataPlaceholder"
+import { Wish } from "./Wish"
 
 /*
 	wishGetPseudos(wish)

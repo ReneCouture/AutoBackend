@@ -4,19 +4,19 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { tableFromPropsAndValues } from './Table-render-functions/tableFromPropsAndValues';
-import { dataPlacerHolderPseudoRandom, dataPlacerHolderPseudoCounter } from './DataPlaceholder';
+import { dataPlacerHolderPseudoRandom, dataPlacerHolderPseudoCounter, dataPlacerHolderPseudoIterate } from './DataPlaceholder';
 import { tableFromObjects } from './Table-render-functions/tableFromObjects';
-import { wishCreate, allTheWishes } from './Wish/Wish';
-import { wishGet } from './Wish/WishGet';
-import { wishGenerateAll } from './Wish/WishGenerateAll';
-import { AlertError } from './Helpers/AlertError';
-import { AlertSuccess } from './Helpers/AlertSuccess';
+import { AlertError } from './Other/AlertError';
+import { AlertSuccess } from './Other/AlertSuccess';
+import { wishSendGenerate } from './Wish/wishSendGenerate';
+import { wishCreate, allTheWishes } from './Wish/wishesConfig';
+import { wishGet } from './Wish/wishGet';
 
 //I am defining wishes here because inside the constructor, it was making twice as many wishes.
 //we want the data we wish we could receive defined once.
 const wishTrucks=wishCreate("wish_trucks",
   {//define the data we wish we could receive from the server
-    name:   dataPlacerHolderPseudoRandom('string',["Sneezy","Old Pete","Top Cat"]),
+    truck:  dataPlacerHolderPseudoIterate('string',["Sneezy","Old Pete","Top Cat","Blacksmith"]),
     color:  dataPlacerHolderPseudoRandom('string',["red","blue","black"]),
   })
 
@@ -84,7 +84,7 @@ class App extends React.Component<any,any>
   {
     try
     {
-      await wishGenerateAll()
+      await wishSendGenerate()
 
       this.setState({
         successMessage:"Backend has been generated from wishes"

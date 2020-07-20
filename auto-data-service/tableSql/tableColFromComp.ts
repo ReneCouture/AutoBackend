@@ -1,4 +1,4 @@
-import { log } from "../log"
+import { log } from "../Other/log"
 
 /*
 	Returns a name and type pair to use in a sql create table query.

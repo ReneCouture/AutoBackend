@@ -1,16 +1,17 @@
-import { log } from "../log"
-import { tableColFromComp } from "./tableColFromComp"
+import { log } from "../Other/log"
+import { tableColFromComp } from "../tableSql/tableColFromComp"
+import { Wish } from "./Wish"
 
 /*
 	Returns table rows as sql created from a wish.
 
 	wish is:
 		{
-			"wishName": "wish0",
+			"name": "wish0",
 			"comps": [
 				{
 					"name": "yourColumNameA",
-					"type": "string"
+					"type": "text"
 				},
 				{
 					"name": "yourColumNameB",
@@ -22,19 +23,19 @@ import { tableColFromComp } from "./tableColFromComp"
 	returns sql columns:
 		(yourColumNameA text,yourColumNameB decimal)
 */
-export function tableColsFromWish(wish:any)
+export function wishGetSqlColumns(wish:Wish)
 {
-	log(`tableColsFromWish() has been reached`)
+	//log(`wishGetSqlColumns() has been reached`)
 
 	if(!Array.isArray(wish.comps))	return ``
 	if(wish.comps.length==0) 		return ``
 
-	log(`wish.comps.length=`,wish.comps.length)
+	//log(`wish.comps.length=`,wish.comps.length)
 
 	if(wish.comps.length==1)		
 	{
 		let col=tableColFromComp(wish.comps[0])
-		log(`col=`,col)
+		//log(`col=`,col)
 		return `(${col})`//return one column (yourColumNameA text)
 	}
 

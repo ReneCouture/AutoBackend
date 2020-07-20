@@ -1,5 +1,5 @@
 import{Pool, PoolClient, QueryResult}from 'pg'
-import { log } from '../log';
+import { log } from './log';
 
 /*
     Sets up a connection to the database.
@@ -9,10 +9,15 @@ import { log } from '../log';
     The systems environment variables will need to be set in both locations.
 */
 const connectionPool:Pool=new Pool({
-    host:       process.env['PG_HOST'],
-    user:       process.env['PG_USER'],
-    password:   process.env['PG_PASSWORD'],
-    database:   process.env['PG_DATABASE'],
+    host:       "renedb.c20mrpixdmho.us-east-1.rds.amazonaws.com",
+    database:   "reneDB",
+    user:       "postgres",
+    password:   "wasspord",
+    
+    // host:       process.env['PG_HOST'],
+    // database:   process.env['PG_DATABASE'],
+    // user:       process.env['PG_USER'],
+    // password:   process.env['PG_PASSWORD'],
     port:       5432,
     max:        2
 });
@@ -28,7 +33,7 @@ const connectionPool:Pool=new Pool({
 */
 export async function performQuery(query:string,queryParams?:any)
 {
-    log(`performQuery() has been reached`)
+    //log(`performQuery() has been reached`)
     let client:PoolClient=await connectionPool.connect()
 
     try
@@ -36,16 +41,16 @@ export async function performQuery(query:string,queryParams?:any)
         let result:QueryResult=await client.query(query,queryParams);
 
         //log(`result=`,result)
-        log(`result.rows=`,result.rows)
+        //log(`result.rows=`,result.rows)
         return result.rows
     }
     catch(e)
     {
-        throw new Error(`   ${e.message}`)
+        throw new Error(`${e.message}`)
     }
     finally
     {
-        log(`performQuery() Releasing client`);
+        //log(`performQuery() Releasing client`);
         client && client.release()
     }
 

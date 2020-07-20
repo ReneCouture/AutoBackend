@@ -1,17 +1,17 @@
 import express from 'express';
 import bodyparser from 'body-parser'
 import { Request,Response } from "express";
-import { performQuery } from './Connections/connectionPool';
-import { endTablesDropAndGenerate } from './endTablesDropAndGenerate';
-import { log } from './log';
-import { corsFilter } from './Connections/corsFilter';
+import { performQuery } from './Other/connectionPool';
+import { endPerformGenerate } from './endpoints/endPerformGenerate';
+import { log } from './Other/log';
+import { corsFilter } from './Other/corsFilter';
 
 export const app=express();
 
 app.use(bodyparser.json())	//convert the request to JSON
 app.use(corsFilter)			//very unsecure cors stuff. I use this to test locally
 
-endTablesDropAndGenerate()
+endPerformGenerate()
 
 app.get(``,async(rq:Request,rs:Response)=>
 {
