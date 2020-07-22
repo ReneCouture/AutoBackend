@@ -4,9 +4,9 @@ import { log } from "../Other/log";
 /*
 	Inserts the pseudo value for every component inside the wish
 */
-export function tableInsertPseudo(wish:Wish)
+export async function tableInsert(wish:Wish,data:any)
 {
-	log(`tableInsertPseudo() has been reached`)
-
+	log(`tableInsert() has been reached`)
 	log(`wish=`,wish)
+	log(`data=`,data)
 }

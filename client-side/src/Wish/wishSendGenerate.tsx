@@ -59,7 +59,7 @@ export async function wishSendGenerate()
 
 	log(`request=`,request)
 
-	axiosClient.post('/performGenerate',request)
+	await axiosClient.post('/performGenerate',request)
 }
 
 /*

@@ -5,6 +5,7 @@ import { performQuery } from './Other/connectionPool';
 import { endPerformGenerate } from './endpoints/endPerformGenerate';
 import { log } from './Other/log';
 import { corsFilter } from './Other/corsFilter';
+import { endPostData } from './endpoints/endPostData';
 
 export const app=express();
 
@@ -12,6 +13,7 @@ app.use(bodyparser.json())	//convert the request to JSON
 app.use(corsFilter)			//very unsecure cors stuff. I use this to test locally
 
 endPerformGenerate()
+endPostData()
 
 app.get(``,async(rq:Request,rs:Response)=>
 {

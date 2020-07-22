@@ -4,7 +4,6 @@ import { log } from "../Other/log";
 import { logSend } from "../Other/logSend";
 import { tableDrop, tableCreate } from "../tableSql/tableDropAndCreate";
 import { Wish } from "../Wish/Wish";
-import { tableInsertPseudo } from "../tableSql/tableInsertPseudo";
 
 /*
 	This endpoint receives a generate request. 

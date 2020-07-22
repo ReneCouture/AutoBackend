@@ -11,11 +11,12 @@ import { AlertSuccess } from './Other/AlertSuccess';
 import { wishSendGenerate } from './Wish/wishSendGenerate';
 import { wishCreate, allTheWishes } from './Wish/wishesConfig';
 import { wishGet } from './Wish/wishGet';
+import { wishSendData } from './Wish/wishSendData';
 
 //I am defining wishes here because inside the constructor, it was making twice as many wishes.
 //we want the data we wish we could receive defined once.
 const wishTrucks=wishCreate("wish_trucks",
-  {//define the data we wish we could receive from the server
+  {//define the data we wish we could receive and post to the server
     truck:  dataPlacerHolderPseudoIterate('string',["Sneezy","Old Pete","Top Cat","Blacksmith"]),
     color:  dataPlacerHolderPseudoRandom('string',["red","blue","black"]),
   })
@@ -72,6 +73,7 @@ class App extends React.Component<any,any>
             <Row>
                 <Col><h4>All wishes</h4>  </Col>
                 <Col><Button onClick={this.clickGenerate}>Generate</Button> </Col>
+                <Col><Button onClick={this.clickPostStuff}>Post stuff</Button> </Col>
             </Row>
             {tableFromObjects(allTheWishes)}
           </Col>
@@ -95,6 +97,40 @@ class App extends React.Component<any,any>
       this.setState({
         errorObj:e,
         errorMessage:"Could not generate all wishes"
+      })
+    }
+  }
+
+  clickPostStuff=async()=>
+  {
+    try
+    {
+      //send an array of trucks we wish the backend would save for us
+      await wishSendData(wishTrucks,
+        [
+          {
+            truck:  'truck post A',//maybe change this to a class/model
+            color:  'color A',
+          },
+          {
+            truck:  'truck post B',
+            color:  'color B',
+          },
+          {
+            truck:  'truck post C',
+            color:  'color C',
+          }
+        ])
+
+      this.setState({
+        successMessage:"Stuff has been posted"
+      })
+    }
+    catch(e)
+    {
+      this.setState({
+        errorObj:e,
+        errorMessage:"Could not post stuff"
       })
     }
   }
